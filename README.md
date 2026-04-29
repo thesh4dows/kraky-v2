@@ -1,20 +1,18 @@
 # kraky-v2
 | Function | Component |
 |--------|----------|
-| First Board | Base |
-| Logic board / Wi-Fi / Bluetooth | **ESP32-S3** |
+| Logic board | **ESP32-S3 N16R8** |
+| wifi | **nfr24l01** |
+| bluetooth | da trovare |
 | Sub-GHz | **CC1101** |
-| Second Board | Short Distance |
 | RFID | **RDM6300** |
 | NFC | **PN532** |
-| Battery charger | **TP4056** |
+| Battery charger | **CN3163** |
 | Battery | Li-ion |
 | IR Receiver | **TSOP38238** |
 | IR Transmitter | IR LED |
-| Speaker | Passive |
 | GPIO Expansion | 10 Female GPIO pins |
-| microSD Slot | **CM1624** *(not yet implemented in PCB)* |
+| microSD Slot | **CM1624** |
 | Buttons | 4 tactile buttons |
-| Oscilloscope | MPU6050 |
 | Display | Oled Display |
 
