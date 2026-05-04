@@ -11,7 +11,6 @@
 | Battery | Li-ion |
 | IR Receiver | **TSOP38238** |
 | IR Transmitter | IR LED |
-| GPIO Expansion | 10 Female GPIO pins |
 | microSD Slot | **CM1624** |
 | Buttons | 4 tactile buttons |
 | Display | Oled Display |
