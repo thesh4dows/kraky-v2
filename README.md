@@ -15,4 +15,4 @@
 | Buttons | 4 tactile buttons |
 | Display | Oled Display |
 
-usb-c 16 pins, 895-FT232RQ com chip, ams1117-3.3, boot, rst, leds 
+usb-c 16 pins, FT232RQ-REEL com chip, ams1117-3.3, boot, rst, leds 
