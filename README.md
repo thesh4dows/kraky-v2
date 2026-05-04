@@ -16,3 +16,4 @@
 | Buttons | 4 tactile buttons |
 | Display | Oled Display |
 
+usb-c 16 pins, com chip, ams1117-3.3, boot, rst, leds 
