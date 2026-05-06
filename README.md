@@ -2,7 +2,7 @@
 | Function | Component |
 |--------|----------|
 | Logic board | **ESP32-S3 N16R8** |
-| wifi | **nfr24l01** |
+| wifi | **nrf24l01** |
 | bluetooth | da trovare |
 | Sub-GHz | **CC1101** |
 | RFID | **RDM6300** |
