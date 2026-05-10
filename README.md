@@ -5,7 +5,7 @@
 | wifi | **nrf24l01** |
 | bluetooth | da trovare |
 | Sub-GHz | **CC1101** |
-| RFID | **RDM6300** |
+| RFID | **MFRC522** |
 | NFC | **PN532** |
 | Battery charger | **CN3163** |
 | Battery | Li-ion |
