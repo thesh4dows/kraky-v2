@@ -71,15 +71,17 @@ power delivery system; the back one houses the NFC and RFID modules on top of th
 
 # PCB
 
-<img width="748" height="741" alt="Screenshot 2026-05-21 201618" src="https://github.com/user-attachments/assets/ba8b7161-6cf6-4868-9911-5e4783153b01" />
+<img width="722" height="697" alt="Screenshot 2026-05-21 210101" src="https://github.com/user-attachments/assets/075f0950-81c8-4a14-974e-6da5919a4297" />
+
 
 ---
 
 # 3D RENDER
 
-<img width="813" height="887" alt="Screenshot 2026-05-21 161046" src="https://github.com/user-attachments/assets/53bb8d52-b868-4c15-9cd3-9b626084ca83" />
+<img width="711" height="770" alt="Screenshot 2026-05-21 210114" src="https://github.com/user-attachments/assets/1f140f07-f56d-4be5-b50e-2223e0a80987" />
 
-<img width="813" height="861" alt="Screenshot 2026-05-21 201753" src="https://github.com/user-attachments/assets/280ba11a-7eb4-4ad4-af4e-c9cd0abfe7b9" />
+<img width="772" height="774" alt="Screenshot 2026-05-21 210133" src="https://github.com/user-attachments/assets/3d32241d-e4f8-4aea-9a9b-e4b13f319c0d" />
+
 
 ---
 # Responsible Use
