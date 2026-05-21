@@ -1,0 +1,474 @@
+(kicad_sch
+	(version 20260306)
+	(generator "eeschema")
+	(generator_version "10.0")
+	(uuid "605d4627-8755-4fd3-a359-7bbfcfcff38b")
+	(paper "A4")
+	(lib_symbols)
+	(sheet
+		(at 118.11 58.42)
+		(size 22.86 12.7)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "37616642-1ca0-40dd-9a37-3b30bb905008")
+		(property "Sheetname" "display(A)"
+			(at 118.11 57.7084 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "display.kicad_sch"
+			(at 118.11 71.7046 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "kraky2"
+				(path "/605d4627-8755-4fd3-a359-7bbfcfcff38b"
+					(page "11")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 120.65 29.21)
+		(size 19.05 11.43)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "45a378f0-98cb-4241-8410-41c25db886e8")
+		(property "Sheetname" "wifi(B)"
+			(at 120.65 28.4984 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "wifi.kicad_sch"
+			(at 120.65 41.2246 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "kraky2"
+				(path "/605d4627-8755-4fd3-a359-7bbfcfcff38b"
+					(page "5")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 64.77 60.96)
+		(size 16.51 10.16)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "81236da0-2f6a-4b09-aff1-7df4ee538063")
+		(property "Sheetname" "ir"
+			(at 64.77 60.2484 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "ir.kicad_sch"
+			(at 64.77 71.7046 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "kraky2"
+				(path "/605d4627-8755-4fd3-a359-7bbfcfcff38b"
+					(page "4")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 64.77 26.67)
+		(size 25.4 13.97)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "8a2a5bbc-3f7d-4e6f-a3ab-ec5ea53955e6")
+		(property "Sheetname" "power supply and battery"
+			(at 64.77 25.9584 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "ps_and_b.kicad_sch"
+			(at 64.77 41.2246 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "kraky2"
+				(path "/605d4627-8755-4fd3-a359-7bbfcfcff38b"
+					(page "3")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 220.98 55.88)
+		(size 13.97 16.51)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "bc2e9b1e-ed35-4bae-a196-ae70491b6ab8")
+		(property "Sheetname" "buttons"
+			(at 220.98 55.1684 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "buttons.kicad_sch"
+			(at 220.98 72.9746 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "kraky2"
+				(path "/605d4627-8755-4fd3-a359-7bbfcfcff38b"
+					(page "10")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 69.85 81.28)
+		(size 27.94 11.43)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "d214d77f-18ba-4cad-ae70-384c07a09cff")
+		(property "Sheetname" "micro sd slot(C)"
+			(at 69.85 80.5684 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "microsdslot.kicad_sch"
+			(at 69.85 93.2946 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "kraky2"
+				(path "/605d4627-8755-4fd3-a359-7bbfcfcff38b"
+					(page "6")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 172.72 58.42)
+		(size 19.05 12.7)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "de73e159-3904-4276-96db-7c094755b418")
+		(property "Sheetname" "nfc(E)"
+			(at 172.72 57.7084 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "nfc.kicad_sch"
+			(at 172.72 71.7046 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "kraky2"
+				(path "/605d4627-8755-4fd3-a359-7bbfcfcff38b"
+					(page "8")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 173.99 30.48)
+		(size 19.05 10.16)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "ef404208-6fbd-4601-b6a8-f2b2644f2516")
+		(property "Sheetname" "subg(D)"
+			(at 173.99 29.7684 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "subg.kicad_sch"
+			(at 173.99 41.2246 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "kraky2"
+				(path "/605d4627-8755-4fd3-a359-7bbfcfcff38b"
+					(page "7")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 12.7 12.7)
+		(size 52.07 74.93)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "f321f304-3479-47c1-9d65-b4892d8d2f1c")
+		(property "Sheetname" "esp32n16r8"
+			(at 12.7 11.9884 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "esp32n16r8.kicad_sch"
+			(at 12.7 88.2146 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "kraky2"
+				(path "/605d4627-8755-4fd3-a359-7bbfcfcff38b"
+					(page "2")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 220.98 25.4)
+		(size 17.78 15.24)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "fd4332fc-fc15-4562-bbf8-5d4a128756ab")
+		(property "Sheetname" "rfid(F)"
+			(at 220.98 24.6884 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "rfid.kicad_sch"
+			(at 220.98 41.2246 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "kraky2"
+				(path "/605d4627-8755-4fd3-a359-7bbfcfcff38b"
+					(page "9")
+				)
+			)
+		)
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+	(embedded_fonts no)
+)
