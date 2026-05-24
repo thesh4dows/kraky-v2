@@ -88,6 +88,7 @@ power delivery system; the back one houses the NFC and RFID modules on top of th
 Kraky2 is built to make it easier for anyone to explore and understand how multifunction electronic devices work in everyday life. It’s not intended for bypassing security systems or breaking any laws.
 
 All features are implemented with an educational and experimental focus.
+
 ---
 
 # Tools Used
