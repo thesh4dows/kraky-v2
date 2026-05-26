@@ -5,6 +5,8 @@ It uses the esp32-S3 microntroller to manage all the different modules like the 
 The module is divided in 2 layers, the front one houses the esp32, Wifi and Sub-GHz antennas, buttons, IR and a part of the
 power delivery system; the back one houses the NFC and RFID modules on top of the rest of the power delivery system.
 
+Using the four buttons you can take advantage of all the modules that composes the kraky2, you can also use it connected to 
+a battery or via the usb-c port that is integrated in the circuit.
 ---
 
 # Main Components
