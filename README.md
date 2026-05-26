@@ -91,6 +91,13 @@ All features are implemented with an educational and experimental focus.
 
 ---
 
+# A presentation page
+
+<img width="1414" height="2000" alt="kraky2 poster (2)" src="https://github.com/user-attachments/assets/fceeacda-5e82-4e38-9be2-d7d621d20157" />
+
+
+---
+
 # Tools Used
 
 - KiCad 10
