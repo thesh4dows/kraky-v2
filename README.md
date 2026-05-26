@@ -7,6 +7,13 @@ power delivery system; the back one houses the NFC and RFID modules on top of th
 
 Using the four buttons you can take advantage of all the modules that composes the kraky2, you can also use it connected to 
 a battery or via the usb-c port that is integrated in the circuit.
+
+I would suggest putting first the esp32 as is the most difficult part to put, then the others chip, all the capacitors, resistors, inductors and so on and for last all the
+tht components because they are the ones that pass through the board so they are more simple to put.
+
+I started this journey because i want to create a better version of my project kraky, and i'm doing it by first using smd components instead of the 
+tht modules so i can do some expirience soldering very small parts and stopping using pre made modules but recreating them myself.
+
 ---
 
 # Main Components
