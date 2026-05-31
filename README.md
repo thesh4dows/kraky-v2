@@ -42,7 +42,8 @@ tht modules so i can do some expirience soldering very small parts and stopping 
 
  # POWER DELIVERY SYSTEM
  
- <img width="1182" height="709" alt="Screenshot 2026-05-21 200851" src="https://github.com/user-attachments/assets/022af18d-a70a-4565-98f1-1de315b32d25" />
+<img width="1201" height="713" alt="Screenshot 2026-05-31 180216" src="https://github.com/user-attachments/assets/ca888b68-b830-4657-a2c7-ea668f36ed33" />
+
 
 # IR
 
