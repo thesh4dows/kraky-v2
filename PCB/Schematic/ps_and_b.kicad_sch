@@ -3361,6 +3361,12 @@
 		(uuid "733b3ebb-138a-45e7-8dbd-00b43b8959dc")
 	)
 	(junction
+		(at 248.92 82.55)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "748bb0f9-4ca7-4959-b320-f54afb5b9625")
+	)
+	(junction
 		(at 190.5 63.5)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -3379,10 +3385,10 @@
 		(uuid "a1c1af08-a96d-4d9d-b2d1-cac1f4cc5e7c")
 	)
 	(junction
-		(at 248.92 74.93)
+		(at 243.84 69.85)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "a309cbbd-7e8d-40c9-b232-25b9fa641d8f")
+		(uuid "a2daec1c-726f-47af-ae7e-478e5d8fa016")
 	)
 	(junction
 		(at 187.96 132.08)
@@ -3395,6 +3401,18 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "a569ad36-2c32-478d-b58d-7b409b38d5b6")
+	)
+	(junction
+		(at 248.92 85.09)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "bfa1c79f-6c78-4c65-bbb2-2ad6f7276f39")
+	)
+	(junction
+		(at 243.84 77.47)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "cfc841d5-7045-4fd8-96e6-43391ce0e280")
 	)
 	(junction
 		(at 182.88 50.8)
@@ -3538,7 +3556,7 @@
 	)
 	(wire
 		(pts
-			(xy 233.68 74.93) (xy 248.92 74.93)
+			(xy 234.95 82.55) (xy 248.92 82.55)
 		)
 		(stroke
 			(width 0)
@@ -3728,6 +3746,16 @@
 	)
 	(wire
 		(pts
+			(xy 243.84 85.09) (xy 248.92 85.09)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "465a371d-2278-4887-9d56-fe4f76c02c91")
+	)
+	(wire
+		(pts
 			(xy 67.31 96.52) (xy 67.31 73.66)
 		)
 		(stroke
@@ -3755,6 +3783,26 @@
 			(type default)
 		)
 		(uuid "51386380-8651-4442-9281-527606d61b1f")
+	)
+	(wire
+		(pts
+			(xy 234.95 82.55) (xy 234.95 74.93)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "56281142-4fc7-4d05-b1f4-f1109bb65bf7")
+	)
+	(wire
+		(pts
+			(xy 242.57 77.47) (xy 243.84 77.47)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5699490a-a769-45ca-a4ad-4a1254501e73")
 	)
 	(wire
 		(pts
@@ -3828,7 +3876,7 @@
 	)
 	(wire
 		(pts
-			(xy 248.92 74.93) (xy 248.92 77.47)
+			(xy 248.92 72.39) (xy 248.92 82.55)
 		)
 		(stroke
 			(width 0)
@@ -3888,6 +3936,16 @@
 	)
 	(wire
 		(pts
+			(xy 248.92 82.55) (xy 248.92 85.09)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "733fc407-5516-4d33-8353-6a910a3a5f7d")
+	)
+	(wire
+		(pts
 			(xy 245.11 157.48) (xy 245.11 160.02)
 		)
 		(stroke
@@ -3895,6 +3953,16 @@
 			(type default)
 		)
 		(uuid "75aa3c19-c792-4800-82c7-8cda4f8ed185")
+	)
+	(wire
+		(pts
+			(xy 243.84 69.85) (xy 246.38 69.85)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7dab4c69-fc5d-497f-a572-b5d01fa7390a")
 	)
 	(wire
 		(pts
@@ -4158,6 +4226,16 @@
 	)
 	(wire
 		(pts
+			(xy 248.92 85.09) (xy 248.92 87.63)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "bf7946e4-da71-4c66-9110-4e50e312fb4e")
+	)
+	(wire
+		(pts
 			(xy 172.72 115.57) (xy 172.72 119.38)
 		)
 		(stroke
@@ -4185,16 +4263,6 @@
 			(type default)
 		)
 		(uuid "ce810e9b-8428-40fb-8906-30e54674886b")
-	)
-	(wire
-		(pts
-			(xy 248.92 72.39) (xy 248.92 74.93)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "cfd1d40d-9f88-4e71-8021-e7eda6d581f8")
 	)
 	(wire
 		(pts
@@ -4268,13 +4336,23 @@
 	)
 	(wire
 		(pts
-			(xy 242.57 69.85) (xy 246.38 69.85)
+			(xy 242.57 69.85) (xy 243.84 69.85)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
 		(uuid "eb41c291-184d-475a-80b9-6305fd54a8cf")
+	)
+	(wire
+		(pts
+			(xy 234.95 74.93) (xy 233.68 74.93)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f1df9b5c-7769-494c-8337-1a3eb49ab896")
 	)
 	(wire
 		(pts
@@ -4445,6 +4523,30 @@
 		(uuid "6d54bbeb-f0f6-4fa3-bc8a-9f25edcd82bb")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 142.0972 115.57 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+	)
+	(global_label "BATT"
+		(shape input)
+		(at 242.57 77.47 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "7a96aab4-8bff-457a-b0e5-41fe6ee164d6")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 235.291 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5214,7 +5316,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 248.92 77.47 0)
+		(at 248.92 87.63 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -5225,7 +5327,7 @@
 		(fields_autoplaced yes)
 		(uuid "301773cb-dca4-4a42-8195-c07df6ae55e8")
 		(property "Reference" "#PWR016"
-			(at 248.92 83.82 0)
+			(at 248.92 93.98 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5236,7 +5338,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 248.92 82.55 0)
+			(at 248.92 92.71 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5246,7 +5348,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 248.92 77.47 0)
+			(at 248.92 87.63 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5257,7 +5359,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 248.92 77.47 0)
+			(at 248.92 87.63 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5268,7 +5370,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 248.92 77.47 0)
+			(at 248.92 87.63 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5530,6 +5632,86 @@
 			(project "kraky2"
 				(path "/605d4627-8755-4fd3-a359-7bbfcfcff38b/8a2a5bbc-3f7d-4e6f-a3ab-ec5ea53955e6"
 					(reference "C3")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 243.84 81.28 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "74ffc112-7b41-4bd3-b4dd-3d2cd1bf344b")
+		(property "Reference" "R26"
+			(at 250.19 81.28 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "3.6K"
+			(at 247.65 81.28 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
+			(at 242.062 81.28 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "carica a 500mAh"
+			(at 243.84 81.28 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 243.84 81.28 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "2"
+			(uuid "096c7129-33ce-4e14-9bbc-e2619f4b3122")
+		)
+		(pin "1"
+			(uuid "61f072c9-4675-4f9e-9394-45fd1d3412f8")
+		)
+		(instances
+			(project "kraky2"
+				(path "/605d4627-8755-4fd3-a359-7bbfcfcff38b/8a2a5bbc-3f7d-4e6f-a3ab-ec5ea53955e6"
+					(reference "R26")
 					(unit 1)
 				)
 			)
@@ -6711,6 +6893,86 @@
 			(project "kraky2"
 				(path "/605d4627-8755-4fd3-a359-7bbfcfcff38b/8a2a5bbc-3f7d-4e6f-a3ab-ec5ea53955e6"
 					(reference "#PWR055")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 243.84 73.66 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "baba0e81-dbd1-4bf2-92a2-397db821009e")
+		(property "Reference" "R25"
+			(at 250.19 73.66 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "3.6K"
+			(at 247.65 73.66 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
+			(at 242.062 73.66 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "carica a 500mAh"
+			(at 243.84 73.66 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 243.84 73.66 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "2"
+			(uuid "64694211-293b-4881-8c49-af2764eee845")
+		)
+		(pin "1"
+			(uuid "58ada71c-6b1b-4af3-a4dd-96ab8478687b")
+		)
+		(instances
+			(project "kraky2"
+				(path "/605d4627-8755-4fd3-a359-7bbfcfcff38b/8a2a5bbc-3f7d-4e6f-a3ab-ec5ea53955e6"
+					(reference "R25")
 					(unit 1)
 				)
 			)
