@@ -1,314 +1,260 @@
 /*
- * KRAKY DEVICE – ESP32
+ * KRAKY2
  */
 
 #include <Arduino.h>
 #include <WiFi.h>
 #include <Wire.h>
 #include <SPI.h>
-#include <Adafruit_SSD1306.h>
-#include <Adafruit_PN532.h>
-#include <IRremoteESP8266.h>
-#include <IRrecv.h>
-#include <IRsend.h>
-#include <IRutils.h>
-#include <LoRa.h>
 
 // ================= PIN =================
 
 // Pulsanti
-#define BTN_UP     5
-#define BTN_DOWN   18
-#define BTN_OK     19
-#define BTN_BACK   25
+#define BTN_UP     41
+#define BTN_DOWN   38
+#define BTN_OK     40
+#define BTN_BACK   39
 
-// OLED
-#define OLED_SDA   21
-#define OLED_SCL   22
-
-// Buzzer
-#define BUZZER     13
-
-// RFID RDM6300 (Serial2)
-#define RFID_RX    17
-#define RFID_TX    4
-
-// IR
-#define IR_RX      35
-#define IR_TX      16
 
 // SPI (VSPI)
-#define SPI_SCK    18
-#define SPI_MISO   19
-#define SPI_MOSI   23
+#define SPI_SCK    21
+#define SPI_MISO   17
+#define SPI_MOSI   18
 
-// PN532
-#define NFC_SS     5
-
-// LoRa
-#define LORA_SS    26
-#define LORA_RST   27
-#define LORA_DIO0  14
-
-// ================= OGGETTI =================
-
-Adafruit_SSD1306 display(128, 64, &Wire, -1);
+// PN532 E
+#include <Adafruit_PN532.h>
+#define NFC_SS     1
+#define NFC_ANTSEL 5
 Adafruit_PN532 nfc(NFC_SS);
 
-IRrecv irRecv(IR_RX);
-IRsend irSend(IR_TX);
-decode_results irResults;
+// LoRa D
+#include <RadioLib.h>
+#define LORA_CSN   3 //attivo se low
+#define LORA_DIO0  2
+CC1101 cc1101 = new Module(LORA_CSN, LORA_DIO0, RADIOLIB_NC, RADIOLIB_NC);
+
+//IR
+#include <IRremote.hpp>
+#define IR_LED     42
+#define IR_REC     45
+
+//DISPLAY A ST7789
+#include <Adafruit_GFX.h>
+#include <Adafruit_ST7789.h>
+#define DS_CS      46
+#define DS_DC      47
+Adafruit_ST7789 tft = Adafruit_ST7789(DS_CS, DS_DC, -1);
+
+//WIFI B
+#include <RF24.h>
+#define WIFI_CSN   48 //attivo se low 
+#define WIFI_CE    4
+#include <WiFi.h>
+RF24 nrf24(WIFI_CE, WIFI_CSN);
+const byte address[6] = "00001";
+
+//RFID F
+#include <MFRC522.h>
+#define RFID_CSN   6
+#define RFID_ANTSEL 7
+MFRC522 rfid(RFID_CSN, -1);
+
+//MICRO SD SLOT C
+#include <SD.h>
+#define MSD_CS     8
+//Battery 
+#define BAT_PIN 9
+//BLUETOOTH
+#include <NimBLEDevice.h>
+// ================= OGGETTI =================
+
+
 
 // ================= MENU =================
 
-const char *menuItems[] = {
-  "RFID Reader",
-  "NFC Scanner",
-  "IR Receiver",
-  "LoRa Listener",
-  "WiFi Scan",
-  "About"
+struct Item {
+  const char* name;
+  int id;
+  int parent;
 };
 
-uint8_t menuIndex = 0;
-const uint8_t MENU_LEN = 6;
+Item menu[] = {
+  {"WiFi",     0, -1},
+  {"NFC",      1, -1},
+  {"RFID",     2, -1},
+  {"Sub-GHz", 3, -1},
+  {"Bluetooth", 4, -1},
+  {"IR", 5,-1},
+  {"Settings", 6, -1},
+  // WiFi
+  {"Wifi Scan",     7, 0},
+  {"Wifi Monitor",  8, 0},
 
-// ================= UTILITY =================
+  // NFC
+  {"NFC Read",     9, 1},
+  {"NFC Write",    10, 1},
 
-void beep(uint16_t freq, uint16_t dur) {
-  tone(BUZZER, freq, dur);
-  delay(dur);
-  noTone(BUZZER);
-}
+  // RFID
+  {"RFID Dump",     11, 2},
+  {"RFID Clone",    12, 2},
 
-bool pressed(uint8_t pin) {
-  return digitalRead(pin) == LOW;
-}
+  // subghz
+  {"Sub-GHz Scan", 13, 3},
+  {"Sub-GHz Jammer",  14, 3},
 
-void drawText(const char *txt) {
-  display.clearDisplay();
-  display.setTextSize(1);
-  display.setTextColor(SSD1306_WHITE);
-  display.setCursor(0, 0);
-  display.print(txt);
-  display.display();
-}
+  //bluetooth
+  {"BLE Scan", 15, 4},
+  {"BLE Jammer", 16, 4},
 
-// ================= MENU DISPLAY =================
+  //IR
+  {"IR Scan", 17, 5},
+  {"IR Write", 18, 5},
 
+  //settings
+  {"Display", 19, 6},
+  {"System",  20, 6},
+};
+
+int menuSize = sizeof(menu) / sizeof(menu[0]);
+
+// ---------------- NAV STACK ----------------
+int parentStack[10];
+int selectedStack[10];
+int level = 0;
+int currentParent = -1;
+int selected = 0;
+int visibleItems[20];
+int visibleCount = 0;
+// ---------------- DRAW ----------------
 void drawMenu() {
-  display.clearDisplay();
-  display.setCursor(0, 0);
-  display.println("=== KRAKY ===\n");
+  tft.fillScreen(ST77XX_BLACK);
+  tft.setTextSize(1);
+  visibleCount = 0;
+  int y = 20;
 
-  for (uint8_t i = 0; i < MENU_LEN; i++) {
-    display.print(i == menuIndex ? "> " : "  ");
-    display.println(menuItems[i]);
-  }
-  display.display();
-}
+  for (int i = 0; i < menuSize; i++) {
 
-// ================= RFID =================
-
-void scanRFID() {
-  Serial2.begin(9600, SERIAL_8N1, RFID_RX, RFID_TX);
-  drawText("RFID\nAvvicina il tag");
-
-  char id[16] = {0};
-  uint8_t idx = 0;
-  unsigned long t0 = millis();
-
-  while (millis() - t0 < 8000) {
-    if (Serial2.available()) {
-      char c = Serial2.read();
-      if (isHexadecimalDigit(c) && idx < 12) {
-        id[idx++] = c;
-        id[idx] = '\0';
+    if (menu[i].parent == currentParent) {
+      visibleItems[visibleCount] = i;
+      visibleCount++;
+      if (i == selected) {
+        tft.setTextColor(ST77XX_BLACK, ST77XX_WHITE);
+      } else {
+        tft.setTextColor(ST77XX_WHITE);
       }
-      if (idx >= 12) {
-        char buf[32];
-        snprintf(buf, sizeof(buf), "TAG RFID:\n%s", id);
-        drawText(buf);
-        beep(1000, 150);
-        delay(3000);
-        return;
-      }
+
+      tft.setCursor(10, y);
+      tft.print(menu[i].name);
+      y += 15;
     }
-    if (pressed(BTN_BACK)) break;
   }
-
-  drawText("Nessun TAG");
-  delay(2000);
 }
 
-// ================= NFC =================
+// ---------------- FIND NEXT ----------------
+int findNext(int start, int dir) {
+  int i = start;
 
-void scanNFC() {
-  drawText("NFC\nAvvicina il tag");
+  while (true) {
+    i += dir;
+    if (i < 0) i = visibleCount - 1;
+    if (i >= visibleCount) i = 0;
 
-  uint8_t uid[7];
-  uint8_t uidLen;
-
-  unsigned long t0 = millis();
-  while (millis() - t0 < 8000) {
-    if (nfc.readPassiveTargetID(PN532_MIFARE_ISO14443A, uid, &uidLen)) {
-      display.clearDisplay();
-      display.println("NFC UID:");
-      for (uint8_t i = 0; i < uidLen; i++) {
-        display.print(uid[i], HEX);
-        display.print(" ");
-      }
-      display.display();
-      beep(1200, 200);
-      delay(3000);
-      return;
-    }
-    if (pressed(BTN_BACK)) break;
+    return i;
   }
-
-  drawText("Nessun NFC");
-  delay(2000);
 }
 
-// ================= IR =================
-
-void scanIR() {
-  drawText("IR\nPremi un tasto");
-  irRecv.enableIRIn();
-
-  unsigned long t0 = millis();
-  while (millis() - t0 < 10000) {
-    if (irRecv.decode(&irResults)) {
-      char buf[48];
-      snprintf(
-        buf,
-        sizeof(buf),
-        "IR:\n%s\n0x%X",
-        typeToString(irResults.decode_type).c_str(),
-        irResults.value
-      );
-      drawText(buf);
-      beep(900, 150);
-      irRecv.resume();
-      delay(3000);
-      return;
-    }
-    if (pressed(BTN_BACK)) break;
-  }
-
-  drawText("Nessun IR");
-  delay(2000);
-}
-
-// ================= LORA =================
-
-void listenLoRa() {
-  drawText("LoRa\nIn ascolto...");
-
-  unsigned long t0 = millis();
-  while (millis() - t0 < 15000) {
-    int size = LoRa.parsePacket();
-    if (size) {
-      char msg[64];
-      uint8_t i = 0;
-      while (LoRa.available() && i < sizeof(msg) - 1) {
-        msg[i++] = (char)LoRa.read();
-      }
-      msg[i] = '\0';
-      drawText(msg);
-      beep(800, 200);
-      delay(3000);
-      return;
-    }
-    if (pressed(BTN_BACK)) break;
-  }
-
-  drawText("Nessun pacchetto");
-  delay(2000);
-}
-
-// ================= WIFI =================
-
-void wifiScan() {
-  drawText("WiFi scan...");
-  WiFi.mode(WIFI_STA);
-  WiFi.disconnect();
-  delay(200);
-
-  int n = WiFi.scanNetworks();
-  display.clearDisplay();
-  display.println("Reti trovate:");
-
-  for (int i = 0; i < n && i < 4; i++) {
-    display.println(WiFi.SSID(i));
-  }
-  display.display();
-  beep(1000, 200);
-  delay(4000);
-}
-
-// ================= ABOUT =================
-
-void about() {
-  drawText("KRAKY DEVICE\nESP32\nv1.0\nby You <3");
-  delay(4000);
-}
 
 // ================= SETUP =================
 
-void setup() {
-  Serial.begin(115200);
-
+void setup(){
+  SPI.begin();
+  //display
+  tft.init(172, 320);
+  tft.setRotation(1);
+  tft.fillScreen(ST77XX_BLACK);
+  //LoRa
+  int state = cc1101.begin(868.0); // o 915.0
+  //IR
+  IrSender.begin(IR_LED); 
+  IrReceiver.begin(IR_REC, ENABLE_LED_FEEDBACK);
+  //WIFI
+    //modalità trasmissione
+  nrf24.begin();
+  nrf24.openWritingPipe(address);
+  nrf24.setPALevel(RF24_PA_LOW);
+  nrf24.stopListening();
+    //modalità ricezione
+  nrf24.begin();
+  nrf24.openReadingPipe(0, address);
+  nrf24.setPALevel(RF24_PA_LOW);
+  nrf24.startListening();
+  //RFID
+  rfid.PCD_Init();
+  rfid.PCD_DumpVersionToSerial();
+  //NFC
+  nfc.begin();
+  nfc.SAMConfig(); //modalità ascolto
+  //Menù
   pinMode(BTN_UP, INPUT_PULLUP);
   pinMode(BTN_DOWN, INPUT_PULLUP);
   pinMode(BTN_OK, INPUT_PULLUP);
   pinMode(BTN_BACK, INPUT_PULLUP);
-  pinMode(BUZZER, OUTPUT);
-
-  Wire.begin(OLED_SDA, OLED_SCL);
-  display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
-
-  SPI.begin(SPI_SCK, SPI_MISO, SPI_MOSI);
-
-  nfc.begin();
-  nfc.SAMConfig();
-
-  LoRa.setPins(LORA_SS, LORA_RST, LORA_DIO0);
-  LoRa.begin(433E6);
-
-  drawText("KRAKY BOOT");
-  beep(600, 100);
-  beep(800, 100);
+  drawMenu();
 }
 
 // ================= LOOP =================
 
 void loop() {
-  drawMenu();
-
-  if (pressed(BTN_UP)) {
-    menuIndex = (menuIndex + MENU_LEN - 1) % MENU_LEN;
-    beep(1200, 40);
-    delay(200);
-  }
-
-  if (pressed(BTN_DOWN)) {
-    menuIndex = (menuIndex + 1) % MENU_LEN;
-    beep(1200, 40);
-    delay(200);
-  }
-
-  if (pressed(BTN_OK)) {
-    beep(1500, 60);
-    switch (menuIndex) {
-      case 0: scanRFID(); break;
-      case 1: scanNFC(); break;
-      case 2: scanIR(); break;
-      case 3: listenLoRa(); break;
-      case 4: wifiScan(); break;
-      case 5: about(); break;
+  //Battery
+    int raw = analogRead(BAT_PIN);
+    float voltage = ((float)raw / 4095.0) * 3.3 * 2.0;
+  //Menù
+    // UP
+    if (digitalRead(BTN_UP) == LOW) {
+      selected = findNext(selected, -1);
+      drawMenu();
+      delay(150);
     }
-  }
 
-  delay(100);
+    // DOWN
+    if (digitalRead(BTN_DOWN) == LOW) {
+      selected = findNext(selected, +1);
+      drawMenu();
+      delay(150);
+    }
+
+    // OK → entra nel submenu corretto
+    if (digitalRead(BTN_OK) == LOW) {
+
+      parentStack[level] = currentParent;
+      selectedStack[level] = selected;
+      level++;
+
+      int index = visibleItems[selected];
+      currentParent = index;   
+      selected = 0;
+
+      drawMenu();
+      delay(200);
+    }
+
+    // BACK → torna di 1 livello
+    if (digitalRead(BTN_BACK) == LOW) {
+
+      if (level > 0) {
+        level--;
+        if (level > 0) {
+        level--;
+        currentParent = parentStack[level];
+        selected = selectedStack[level];
+      } else {
+        currentParent = -1;
+        selected = 0;
+      }
+        selected = selectedStack[level];
+      }
+
+      drawMenu();
+      delay(200);
+    }
 }
