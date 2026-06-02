@@ -42,9 +42,10 @@ Item menu[] = {
   {"NFC Write",    3, 0},
   {"NFC Info",     4, 0},
   {"NFC Dump",     5, 0},
+  {"Write Custom", 6, 0},
   // Settings
-  {"Display",      6, 1},
-  {"System",       7, 1},
+  {"Display",      7, 1},
+  {"System",       8, 1},
 };
 
 int menuSize = sizeof(menu) / sizeof(menu[0]);
@@ -61,7 +62,7 @@ int visibleCount = 0;
 
 // ---------------- NFC STATE ----------------
 bool nfcModeActive = false;
-String dataToWrite = "Ciao NFC!";
+String dataToWrite = "Hello NFC!";
 
 // ---------------- DRAW MENU ----------------
 void drawMenu() {
@@ -101,22 +102,42 @@ int findNext(int start, int dir) {
   }
 }
 
+// ---------------- AUTHENTICATE BLOCK ----------------
+bool authenticateBlock(uint8_t block) {
+  uint8_t keya[6] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
+  bool result = nfc.mifareclassic_AuthenticateBlock(nfcUid, uidLength, block, 0, keya);
+  
+  if (result) {
+    Serial.print("✓ Blocco ");
+    Serial.print(block);
+    Serial.println(" autenticato");
+  } else {
+    Serial.print("✗ Errore autenticazione blocco ");
+    Serial.println(block);
+  }
+  
+  return result;
+}
+
 // ---------------- EXECUTE ACTION ----------------
 void executeAction(int id) {
   nfcModeActive = true;
   
   switch(id) {
-    case 2: // NFC Read
+    case 2:
       nfcReadTag();
       break;
-    case 3: // NFC Write
+    case 3:
       nfcWriteTag();
       break;
-    case 4: // NFC Info
+    case 4:
       nfcShowInfo();
       break;
-    case 5: // NFC Dump
+    case 5:
       nfcDumpMemory();
+      break;
+    case 6:
+      nfcWriteCustomData();
       break;
     default:
       nfcModeActive = false;
@@ -133,8 +154,131 @@ void executeAction(int id) {
   }
 }
 
-// ---------------- NFC FUNCTIONS ----------------
+// ---------------- WRITE CUSTOM (Mifare Classic specific) ----------------
+void nfcWriteCustomData() {
+  Serial.println("\n=== WRITE CUSTOM DATA (Mifare Classic) ===");
+  
+  tft.fillScreen(ST77XX_BLACK);
+  tft.setTextColor(ST77XX_WHITE);
+  tft.setCursor(5, 5);
+  tft.println("WRITE CUSTOM DATA");
+  tft.setCursor(5, 20);
+  tft.println("Avvicina un tag...");
+  tft.setCursor(5, 60);
+  tft.println("Scrive in blocco 4:");
+  tft.println("'luisllamas.es'");
+  tft.setCursor(5, 140);
+  tft.setTextColor(ST77XX_YELLOW);
+  tft.println("BACK per uscire");
+  
+  while (nfcModeActive) {
+    if (digitalRead(BTN_BACK) == LOW) {
+      Serial.println("Uscita da Write Custom");
+      nfcModeActive = false;
+      delay(300);
+      break;
+    }
+    
+    Serial.println("In attesa di un tag...");
+    bool success = nfc.readPassiveTargetID(PN532_MIFARE_ISO14443A, nfcUid, &uidLength, 200);
+    
+    if (success) {
+      Serial.println("✓ Tag rilevato!");
+      Serial.print("UID: ");
+      for (uint8_t i = 0; i < uidLength; i++) {
+        if (nfcUid[i] < 0x10) Serial.print("0");
+        Serial.print(nfcUid[i], HEX);
+        Serial.print(" ");
+      }
+      Serial.println();
+      Serial.print("UID Length: ");
+      Serial.println(uidLength);
+      
+      tft.fillScreen(ST77XX_BLACK);
+      tft.setCursor(5, 5);
+      tft.setTextColor(ST77XX_GREEN);
+      tft.println("TAG RILEVATO!");
+      tft.setTextColor(ST77XX_WHITE);
+      
+      tft.setCursor(5, 25);
+      tft.print("UID: ");
+      for (uint8_t i = 0; i < uidLength; i++) {
+        if (nfcUid[i] < 0x10) tft.print("0");
+        tft.print(nfcUid[i], HEX);
+      }
+      
+      // Solo per Mifare Classic (UID length = 4)
+      if (uidLength == 4) {
+        tft.setCursor(5, 45);
+        tft.println("Autenticazione...");
+        Serial.println("Autenticazione blocco 4...");
+        
+        if (authenticateBlock(4)) {
+          tft.setCursor(5, 65);
+          tft.println("Autenticato blocco 4");
+          
+          uint8_t data[16];
+          memcpy(data, (const uint8_t[]){ 'l', 'u', 'i', 's', 'l', 'l', 'a', 'm', 'a', 's', '.', 'e', 's', 0, 0, 0 }, sizeof data);
+          
+          Serial.println("Scrittura dati: luisllamas.es");
+          tft.setCursor(5, 85);
+          tft.println("Scrittura...");
+          
+          success = nfc.mifareclassic_WriteDataBlock(4, data);
+          
+          if (success) {
+            Serial.println("✓ SCRITTURA COMPLETATA!");
+            tft.setTextColor(ST77XX_GREEN);
+            tft.setCursor(5, 105);
+            tft.println("SCRITTURA OK!");
+            tft.setTextColor(ST77XX_WHITE);
+            tft.setCursor(5, 125);
+            tft.print("Dati: luisllamas.es");
+          } else {
+            Serial.println("✗ ERRORE SCRITTURA!");
+            tft.setTextColor(ST77XX_RED);
+            tft.setCursor(5, 105);
+            tft.println("ERRORE SCRITTURA!");
+          }
+        } else {
+          Serial.println("✗ ERRORE AUTENTICAZIONE!");
+          tft.setTextColor(ST77XX_RED);
+          tft.setCursor(5, 65);
+          tft.println("ERRORE AUTENTICAZIONE!");
+        }
+      } else {
+        tft.setTextColor(ST77XX_RED);
+        tft.setCursor(5, 45);
+        tft.println("Solo Mifare Classic");
+        tft.setCursor(5, 60);
+        tft.println("UID 4 bytes");
+        Serial.println("Questo tag non e' Mifare Classic (UID length != 4)");
+      }
+      
+      delay(3000);
+      
+      tft.fillScreen(ST77XX_BLACK);
+      tft.setTextColor(ST77XX_WHITE);
+      tft.setCursor(5, 5);
+      tft.println("WRITE CUSTOM DATA");
+      tft.setCursor(5, 20);
+      tft.println("Avvicina un tag...");
+      tft.setCursor(5, 60);
+      tft.println("Scrive in blocco 4:");
+      tft.println("'luisllamas.es'");
+      tft.setCursor(5, 140);
+      tft.setTextColor(ST77XX_YELLOW);
+      tft.println("BACK per uscire");
+    }
+    
+    delay(100);
+  }
+}
+
+// ---------------- NFC READ ----------------
 void nfcReadTag() {
+  Serial.println("\n=== NFC READ MODE ===");
+  
   tft.fillScreen(ST77XX_BLACK);
   tft.setTextColor(ST77XX_WHITE);
   tft.setCursor(5, 5);
@@ -152,89 +296,76 @@ void nfcReadTag() {
       break;
     }
     
-    // Cerca tag NFC
     bool success = nfc.readPassiveTargetID(PN532_MIFARE_ISO14443A, nfcUid, &uidLength, 200);
     
     if (success) {
+      Serial.println("\n✓ Tag rilevato!");
+      Serial.print("UID: ");
+      for (uint8_t i = 0; i < uidLength; i++) {
+        if (nfcUid[i] < 0x10) Serial.print("0");
+        Serial.print(nfcUid[i], HEX);
+        Serial.print(" ");
+      }
+      Serial.println();
+      
       tft.fillScreen(ST77XX_BLACK);
       tft.setTextColor(ST77XX_GREEN);
       tft.setCursor(5, 5);
       tft.println("TAG RILEVATO!");
       tft.setTextColor(ST77XX_WHITE);
       
-      // Mostra UID
       tft.setCursor(5, 25);
-      tft.print("UID (");
-      tft.print(uidLength);
-      tft.print("b): ");
+      tft.print("UID: ");
       for (uint8_t i = 0; i < uidLength; i++) {
         if (nfcUid[i] < 0x10) tft.print("0");
         tft.print(nfcUid[i], HEX);
-        if (i < uidLength - 1) tft.print(":");
       }
       
-      // Leggi e mostra dati da tutte le pagine
-      uint8_t data[16];
-      int yPos = 45;
-      
-      tft.setCursor(5, yPos);
-      tft.println("DATI LETTI:");
-      yPos += 12;
-      
-      // Leggi pagine (NTAG o Mifare)
-      for (int page = 0; page < 16 && yPos < 135; page++) {
-        bool readSuccess = false;
+      // Determina tipo tag e leggi
+      if (uidLength == 4) {
+        // Mifare Classic
+        tft.setCursor(5, 45);
+        tft.println("Tipo: Mifare Classic");
         
-        // Prova lettura pagina NTAG
-        readSuccess = nfc.ntag2xx_ReadPage(page, data);
+        uint8_t data[16];
+        int yPos = 65;
+        tft.setCursor(5, yPos);
+        tft.println("Blocco 4:");
+        yPos += 12;
         
-        // Se fallisce, prova Mifare Classic
-        if (!readSuccess) {
-          uint8_t authKey[] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
-          readSuccess = nfc.mifareclassic_AuthenticateBlock(nfcUid, uidLength, page * 4, 0, authKey);
-          if (readSuccess) {
-            readSuccess = nfc.mifareclassic_ReadDataBlock(page, data);
+        if (authenticateBlock(4)) {
+          if (nfc.mifareclassic_ReadDataBlock(4, data)) {
+            tft.setCursor(5, yPos);
+            tft.print("Dati: ");
+            for (int i = 0; i < 16; i++) {
+              if (data[i] >= 32 && data[i] <= 126) {
+                tft.print((char)data[i]);
+                Serial.print((char)data[i]);
+              } else {
+                tft.print(".");
+                Serial.print(".");
+              }
+            }
+            Serial.println();
           }
         }
+      } else {
+        // NTAG
+        tft.setCursor(5, 45);
+        tft.println("Tipo: NTAG");
         
-        if (readSuccess) {
-          // Numero pagina
-          tft.setCursor(0, yPos);
-          tft.setTextColor(ST77XX_CYAN);
-          tft.print("P");
-          if (page < 10) tft.print(" ");
-          tft.print(page);
-          tft.print(":");
-          
-          // Dati in HEX
-          tft.setTextColor(ST77XX_WHITE);
-          tft.setCursor(28, yPos);
-          for (int i = 0; i < 4; i++) {
-            if (data[i] < 0x10) tft.print("0");
-            tft.print(data[i], HEX);
-            tft.print(" ");
-          }
-          
-          // Dati come testo
-          tft.setCursor(68, yPos);
+        uint8_t data[4];
+        if (nfc.ntag2xx_ReadPage(4, data)) {
+          tft.setCursor(5, 65);
+          tft.print("Pagina 4: ");
           for (int i = 0; i < 4; i++) {
             if (data[i] >= 32 && data[i] <= 126) {
               tft.print((char)data[i]);
+              Serial.print((char)data[i]);
             } else {
               tft.print(".");
+              Serial.print(".");
             }
-          }
-          
-          yPos += 10;
-          
-          // Stampa seriale
-          Serial.print("Pagina ");
-          Serial.print(page);
-          Serial.print(": ");
-          for (int i = 0; i < 4; i++) {
-            if (data[i] < 0x10) Serial.print("0");
-            Serial.print(data[i], HEX);
-            Serial.print(" ");
           }
           Serial.println();
         }
@@ -242,7 +373,6 @@ void nfcReadTag() {
       
       delay(3000);
       
-      // Torna alla schermata di attesa
       tft.fillScreen(ST77XX_BLACK);
       tft.setTextColor(ST77XX_WHITE);
       tft.setCursor(5, 5);
@@ -258,7 +388,12 @@ void nfcReadTag() {
   }
 }
 
+// ---------------- NFC WRITE ----------------
 void nfcWriteTag() {
+  Serial.println("\n=== NFC WRITE MODE ===");
+  Serial.print("Dati da scrivere: ");
+  Serial.println(dataToWrite);
+  
   tft.fillScreen(ST77XX_BLACK);
   tft.setTextColor(ST77XX_WHITE);
   tft.setCursor(5, 5);
@@ -282,13 +417,22 @@ void nfcWriteTag() {
     bool success = nfc.readPassiveTargetID(PN532_MIFARE_ISO14443A, nfcUid, &uidLength, 200);
     
     if (success) {
+      Serial.println("✓ Tag rilevato!");
+      Serial.print("UID: ");
+      for (uint8_t i = 0; i < uidLength; i++) {
+        if (nfcUid[i] < 0x10) Serial.print("0");
+        Serial.print(nfcUid[i], HEX);
+      }
+      Serial.println();
+      Serial.print("UID Length: ");
+      Serial.println(uidLength);
+      
       tft.fillScreen(ST77XX_BLACK);
       tft.setCursor(5, 5);
       tft.setTextColor(ST77XX_GREEN);
       tft.println("TAG RILEVATO!");
       tft.setTextColor(ST77XX_WHITE);
       
-      // Mostra UID
       tft.setCursor(5, 25);
       tft.print("UID: ");
       for (uint8_t i = 0; i < uidLength; i++) {
@@ -296,74 +440,100 @@ void nfcWriteTag() {
         tft.print(nfcUid[i], HEX);
       }
       
-      // Prepara dati (max 4 byte per pagina)
-      uint8_t writeData[4] = {0};
-      int dataLen = dataToWrite.length();
+      bool writeSuccess = false;
       
-      for (int i = 0; i < 4 && i < dataLen; i++) {
-        writeData[i] = dataToWrite[i];
-      }
-      
-      tft.setCursor(5, 45);
-      tft.println("Scrittura...");
-      
-      // Prova scrittura su pagina 4
-      bool writeSuccess = nfc.ntag2xx_WritePage(4, writeData);
-      
-      if (!writeSuccess) {
-        // Prova altre pagine
-        for (int page = 5; page < 12; page++) {
-          writeSuccess = nfc.ntag2xx_WritePage(page, writeData);
-          if (writeSuccess) break;
+      // Scrittura per Mifare Classic (UID 4 byte)
+      if (uidLength == 4) {
+        tft.setCursor(5, 45);
+        tft.println("Tipo: Mifare Classic");
+        tft.setCursor(5, 60);
+        tft.println("Scrittura blocco 4...");
+        
+        Serial.println("Tentativo scrittura su Mifare Classic...");
+        
+        if (authenticateBlock(4)) {
+          uint8_t writeData[16] = {0};
+          int dataLen = dataToWrite.length();
+          if (dataLen > 16) dataLen = 16;
+          
+          for (int i = 0; i < dataLen; i++) {
+            writeData[i] = dataToWrite[i];
+          }
+          
+          writeSuccess = nfc.mifareclassic_WriteDataBlock(4, writeData);
+          
+          if (writeSuccess) {
+            Serial.println("✓ Scrittura Mifare Classic completata!");
+          } else {
+            Serial.println("✗ Errore scrittura Mifare Classic!");
+          }
+        } else {
+          Serial.println("✗ Autenticazione fallita!");
         }
       }
+      // Scrittura per NTAG (UID 7 byte)
+      else if (uidLength == 7) {
+        tft.setCursor(5, 45);
+        tft.println("Tipo: NTAG");
+        tft.setCursor(5, 60);
+        tft.println("Scrittura pagina 4...");
+        
+        Serial.println("Tentativo scrittura su NTAG...");
+        
+        uint8_t writeData[4] = {0};
+        int dataLen = dataToWrite.length();
+        if (dataLen > 4) dataLen = 4;
+        
+        for (int i = 0; i < dataLen; i++) {
+          writeData[i] = dataToWrite[i];
+        }
+        
+        writeSuccess = nfc.ntag2xx_WritePage(4, writeData);
+        
+        if (writeSuccess) {
+          Serial.println("✓ Scrittura NTAG completata!");
+          
+          // Verifica
+          uint8_t verifyData[4];
+          if (nfc.ntag2xx_ReadPage(4, verifyData)) {
+            Serial.print("Verifica: ");
+            for (int i = 0; i < 4; i++) {
+              Serial.print((char)verifyData[i]);
+            }
+            Serial.println();
+          }
+        } else {
+          Serial.println("✗ Errore scrittura NTAG!");
+        }
+      }
+      else {
+        tft.setCursor(5, 45);
+        tft.setTextColor(ST77XX_RED);
+        tft.println("Tipo non supportato!");
+        tft.setTextColor(ST77XX_WHITE);
+        Serial.println("Tipo tag non supportato per scrittura!");
+      }
       
-      tft.setCursor(5, 65);
+      tft.setCursor(5, 85);
       if (writeSuccess) {
         tft.setTextColor(ST77XX_GREEN);
         tft.println("SCRITTURA OK!");
         tft.setTextColor(ST77XX_WHITE);
-        tft.setCursor(5, 85);
+        tft.setCursor(5, 105);
         tft.print("Scritto: ");
-        
-        for (int i = 0; i < 4; i++) {
-          if (writeData[i] >= 32 && writeData[i] <= 126) {
-            tft.print((char)writeData[i]);
-          } else {
-            tft.print(".");
-          }
-        }
-        
-        // Verifica
-        delay(100);
-        uint8_t verifyData[16];
-        if (nfc.ntag2xx_ReadPage(4, verifyData)) {
-          tft.setCursor(5, 105);
-          tft.print("Verifica: ");
-          for (int i = 0; i < 4; i++) {
-            if (verifyData[i] >= 32 && verifyData[i] <= 126) {
-              tft.print((char)verifyData[i]);
-            } else {
-              tft.print(".");
-            }
-          }
-        }
-        
+        tft.println(dataToWrite);
         Serial.println("Scrittura completata!");
       } else {
         tft.setTextColor(ST77XX_RED);
         tft.println("ERRORE SCRITTURA!");
         tft.setTextColor(ST77XX_WHITE);
-        tft.setCursor(5, 85);
+        tft.setCursor(5, 105);
         tft.println("Tag non scrivibile");
-        tft.println("o protetto");
-        
         Serial.println("Errore scrittura!");
       }
       
       delay(3000);
       
-      // Reset schermata
       tft.fillScreen(ST77XX_BLACK);
       tft.setTextColor(ST77XX_WHITE);
       tft.setCursor(5, 5);
@@ -382,6 +552,7 @@ void nfcWriteTag() {
   }
 }
 
+// ---------------- NFC INFO ----------------
 void nfcShowInfo() {
   tft.fillScreen(ST77XX_BLACK);
   tft.setTextColor(ST77XX_WHITE);
@@ -409,7 +580,6 @@ void nfcShowInfo() {
       tft.println("TAG INFO:");
       tft.setTextColor(ST77XX_WHITE);
       
-      // UID
       tft.setCursor(5, 25);
       tft.print("UID: ");
       for (uint8_t i = 0; i < uidLength; i++) {
@@ -417,7 +587,6 @@ void nfcShowInfo() {
         tft.print(nfcUid[i], HEX);
       }
       
-      // Tipo tag
       tft.setCursor(5, 45);
       tft.print("Tipo: ");
       if (uidLength == 4) {
@@ -432,37 +601,29 @@ void nfcShowInfo() {
         tft.println("Altro standard");
       }
       
-      // Lunghezza UID
       tft.setCursor(5, 80);
       tft.print("UID Length: ");
       tft.print(uidLength);
       tft.println(" bytes");
       
-      // Numero pagine leggibili
-      tft.setCursor(5, 100);
-      tft.print("Pagine: ");
-      uint8_t data[16];
-      int readablePages = 0;
-      for (int p = 0; p < 16; p++) {
-        if (nfc.ntag2xx_ReadPage(p, data)) readablePages++;
-      }
-      tft.print(readablePages);
-      
-      Serial.println("Info tag:");
+      Serial.println("\n=== INFO TAG ===");
       Serial.print("UID: ");
       for (uint8_t i = 0; i < uidLength; i++) {
+        if (nfcUid[i] < 0x10) Serial.print("0");
         Serial.print(nfcUid[i], HEX);
         Serial.print(" ");
       }
       Serial.println();
       Serial.print("UID Length: ");
       Serial.println(uidLength);
-      Serial.print("Pagine leggibili: ");
-      Serial.println(readablePages);
+      if (uidLength == 4) {
+        Serial.println("Tipo: Mifare Classic");
+      } else if (uidLength == 7) {
+        Serial.println("Tipo: NTAG21x");
+      }
       
       delay(3000);
       
-      // Reset schermata
       tft.fillScreen(ST77XX_BLACK);
       tft.setTextColor(ST77XX_WHITE);
       tft.setCursor(5, 5);
@@ -478,6 +639,7 @@ void nfcShowInfo() {
   }
 }
 
+// ---------------- NFC DUMP ----------------
 void nfcDumpMemory() {
   tft.fillScreen(ST77XX_BLACK);
   tft.setTextColor(ST77XX_WHITE);
@@ -505,7 +667,7 @@ void nfcDumpMemory() {
         Serial.print(nfcUid[i], HEX);
         Serial.print(" ");
       }
-      Serial.println("\n");
+      Serial.println();
       
       tft.fillScreen(ST77XX_BLACK);
       tft.setCursor(5, 5);
@@ -515,39 +677,64 @@ void nfcDumpMemory() {
       tft.setCursor(5, 25);
       tft.println("Vedi Serial Monitor");
       
-      uint8_t data[16];
-      
-      for (int page = 0; page < 16; page++) {
-        if (nfc.ntag2xx_ReadPage(page, data)) {
-          Serial.print("Pagina ");
-          Serial.print(page);
-          Serial.print(": ");
-          
-          for (int i = 0; i < 4; i++) {
-            if (data[i] < 0x10) Serial.print("0");
-            Serial.print(data[i], HEX);
-            Serial.print(" ");
-          }
-          
-          Serial.print(" | ");
-          
-          for (int i = 0; i < 4; i++) {
-            if (data[i] >= 32 && data[i] <= 126) {
-              Serial.print((char)data[i]);
-            } else {
-              Serial.print(".");
+      if (uidLength == 4) {
+        // Mifare Classic
+        tft.setCursor(5, 45);
+        tft.println("Dump blocchi 0-15");
+        
+        uint8_t data[16];
+        for (int block = 0; block < 16; block++) {
+          if (authenticateBlock(block)) {
+            if (nfc.mifareclassic_ReadDataBlock(block, data)) {
+              Serial.print("Blocco ");
+              Serial.print(block);
+              Serial.print(": ");
+              for (int i = 0; i < 16; i++) {
+                if (data[i] < 0x10) Serial.print("0");
+                Serial.print(data[i], HEX);
+                Serial.print(" ");
+                if ((i + 1) % 4 == 0) Serial.print(" ");
+              }
+              Serial.print(" | ");
+              for (int i = 0; i < 16; i++) {
+                char c = (data[i] >= 32 && data[i] <= 126) ? (char)data[i] : '.';
+                Serial.print(c);
+              }
+              Serial.println();
             }
           }
-          
-          Serial.println();
+          delay(50);
+        }
+      } else if (uidLength == 7) {
+        // NTAG
+        tft.setCursor(5, 45);
+        tft.println("Dump pagine 0-15");
+        
+        uint8_t data[4];
+        for (int page = 0; page < 16; page++) {
+          if (nfc.ntag2xx_ReadPage(page, data)) {
+            Serial.print("Pagina ");
+            Serial.print(page);
+            Serial.print(": ");
+            for (int i = 0; i < 4; i++) {
+              if (data[i] < 0x10) Serial.print("0");
+              Serial.print(data[i], HEX);
+              Serial.print(" ");
+            }
+            Serial.print(" | ");
+            for (int i = 0; i < 4; i++) {
+              char c = (data[i] >= 32 && data[i] <= 126) ? (char)data[i] : '.';
+              Serial.print(c);
+            }
+            Serial.println();
+          }
         }
       }
       
       Serial.println("=== FINE DUMP ===\n");
       
-      delay(2000);
+      delay(3000);
       
-      // Reset schermata
       tft.fillScreen(ST77XX_BLACK);
       tft.setTextColor(ST77XX_WHITE);
       tft.setCursor(5, 5);
@@ -566,20 +753,30 @@ void nfcDumpMemory() {
 // ---------------- SETUP ----------------
 void setup() {
   Serial.begin(115200);
-  delay(100);
+  delay(1000);  // Attesa per seriale ESP32-S3
+  
+  Serial.println();
+  Serial.println("========================================");
+  Serial.println("SISTEMA NFC - ESP32-S3");
+  Serial.println("========================================");
   
   pinMode(BTN_UP, INPUT_PULLUP);
   pinMode(BTN_DOWN, INPUT_PULLUP);
   pinMode(BTN_OK, INPUT_PULLUP);
   pinMode(BTN_BACK, INPUT_PULLUP);
+  Serial.println("✓ Pulsanti configurati");
 
   SPI.begin(36, 37, 35);
+  Serial.println("✓ SPI inizializzato (SCK=36, MISO=37, MOSI=35)");
 
   tft.initR(INITR_BLACKTAB);
   tft.setRotation(1);
   tft.fillScreen(ST77XX_BLACK);
-  
-  Serial.println("Display TFT inizializzato");
+  tft.setTextSize(1);
+  tft.setTextColor(ST77XX_WHITE);
+  tft.setCursor(10, 50);
+  tft.println("Inizializzazione...");
+  Serial.println("✓ Display TFT inizializzato");
 
   nfc.begin();
   uint32_t versiondata = nfc.getFirmwareVersion();
@@ -587,23 +784,32 @@ void setup() {
   if (versiondata) {
     nfcInitialized = true;
     nfc.SAMConfig();
-    Serial.print("PN532 NFC trovato! Versione: ");
+    Serial.print("✓ PN532 NFC trovato! Versione: ");
     Serial.print((versiondata >> 16) & 0xFF, HEX);
     Serial.print(".");
     Serial.println((versiondata >> 8) & 0xFF, HEX);
     
+    tft.fillScreen(ST77XX_BLACK);
     tft.setCursor(10, 50);
     tft.setTextColor(ST77XX_GREEN);
     tft.println("NFC: OK");
+    tft.setCursor(10, 65);
+    tft.setTextColor(ST77XX_WHITE);
+    tft.print("Versione: ");
+    tft.print((versiondata >> 16) & 0xFF, HEX);
+    tft.print(".");
+    tft.println((versiondata >> 8) & 0xFF, HEX);
   } else {
-    Serial.println("PN532 NFC non trovato!");
+    Serial.println("✗ PN532 NFC non trovato!");
+    tft.fillScreen(ST77XX_BLACK);
     tft.setCursor(10, 50);
     tft.setTextColor(ST77XX_RED);
     tft.println("NFC: Non trovato");
   }
   
-  delay(1000);
+  delay(2000);
   drawMenu();
+  Serial.println("Menu principale avviato");
 }
 
 // ---------------- LOOP ----------------
@@ -627,6 +833,8 @@ void loop() {
 
   if (digitalRead(BTN_OK) == LOW) {
     int index = visibleItems[selected];
+    Serial.print("OK - Esecuzione: ");
+    Serial.println(menu[index].name);
     
     if (menu[index].id >= 2) {
       executeAction(menu[index].id);
