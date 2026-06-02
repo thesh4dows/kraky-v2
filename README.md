@@ -28,7 +28,7 @@ tht modules so i can do some expirience soldering very small parts and stopping 
 | Battery | Li-ion |
 | IR Receiver | **TSOP38238** |
 | IR Transmitter | IR LED |
-| microSD Slot | **CM1624** |
+| microSD Slot | **MSD4A** |
 | Buttons | 4 tactile buttons |
 | Display | TFT Display |
 
