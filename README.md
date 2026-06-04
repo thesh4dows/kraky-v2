@@ -88,9 +88,9 @@ tht modules so i can do some expirience soldering very small parts and stopping 
 
 # 3D RENDER
 
-<img width="711" height="770" alt="Screenshot 2026-05-21 210114" src="https://github.com/user-attachments/assets/1f140f07-f56d-4be5-b50e-2223e0a80987" />
+<img width="719" height="786" alt="Adobe Express - file" src="https://github.com/user-attachments/assets/570084b1-df05-413a-8a69-f5a23098509b" />
+<img width="704" height="786" alt="Adobe Express - file (1)" src="https://github.com/user-attachments/assets/694d9174-aec0-4c62-b7fc-197552aeccbe" />
 
-<img width="772" height="774" alt="Screenshot 2026-05-21 210133" src="https://github.com/user-attachments/assets/3d32241d-e4f8-4aea-9a9b-e4b13f319c0d" />
 
 
 ---
@@ -103,7 +103,8 @@ All features are implemented with an educational and experimental focus.
 
 # A presentation page
 
-<img width="1414" height="2000" alt="kraky2 poster (2)" src="https://github.com/user-attachments/assets/fceeacda-5e82-4e38-9be2-d7d621d20157" />
+<img width="1414" height="2000" alt="kraky2 poster (3)" src="https://github.com/user-attachments/assets/ae7f23db-7d71-487b-a487-06ccc0b4d5c1" />
+
 
 
 ---
