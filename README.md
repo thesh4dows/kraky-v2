@@ -88,8 +88,10 @@ tht modules so i can do some expirience soldering very small parts and stopping 
 
 # 3D RENDER
 
-<img width="719" height="786" alt="Adobe Express - file" src="https://github.com/user-attachments/assets/570084b1-df05-413a-8a69-f5a23098509b" />
-<img width="704" height="786" alt="Adobe Express - file (1)" src="https://github.com/user-attachments/assets/694d9174-aec0-4c62-b7fc-197552aeccbe" />
+<img width="761" height="826" alt="Screenshot 2026-06-04 145629" src="https://github.com/user-attachments/assets/b731df5f-cc39-4309-a4c6-40bbe3e8c465" />
+
+<img width="680" height="805" alt="Screenshot 2026-06-04 145643" src="https://github.com/user-attachments/assets/2943e095-c932-45d9-86d4-1423ae9d60f9" />
+
 
 
 
