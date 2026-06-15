@@ -103,9 +103,10 @@ All features are implemented with an educational and experimental focus.
 
 ---
 
-# A presentation page
+# Zine page
 
-<img width="1414" height="2000" alt="kraky2 poster (3)" src="https://github.com/user-attachments/assets/ae7f23db-7d71-487b-a487-06ccc0b4d5c1" />
+<img width="1414" height="2000" alt="kraky2 poster (5)" src="https://github.com/user-attachments/assets/4e160136-f3dd-4bae-9b97-f2461bf1ba38" />
+
 
 
 
