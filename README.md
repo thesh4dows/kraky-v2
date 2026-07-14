@@ -13,7 +13,7 @@ tht components because they are the ones that pass through the board so they are
 
 I started this journey because i want to create a better version of my project kraky, and i'm doing it by first using smd components instead of the 
 tht modules so i can do some expirience soldering very small parts and stopping using pre made modules but recreating them myself.
-
+420.65
 ---
 
 # Main Components
